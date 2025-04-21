@@ -1,6 +1,6 @@
 import { StyleSheet, View, TouchableWithoutFeedback } from "react-native";
 import { useState } from "react";
-import { Text, Input, Icon, IconElement } from "@ui-kitten/components";
+import { Text, Input, Icon, IconElement, Button } from "@ui-kitten/components";
 
 export default function LoginScreen() {
     const [username, setUsername] = useState('');
@@ -11,33 +11,14 @@ export default function LoginScreen() {
         setSecureEntry(!secureEntry);
     }
 
-    const AlertIcon = (props) => (
+    const hidePassword = (props) => (
         <Icon
             {...props}
-            name='alert-circle-outline'
+            name={secureEntry ? 'eye-off' : 'eye'}
+            onPress={toggleSecurity}
         />
     );
-
-    const renderCaption = () => {
-        return (
-            <View style={styles.captionContainer}>
-                {AlertIcon(styles.captionIcon)}
-                <Text style={styles.captionText}>
-                    Should contain at least 8 symbols
-                </Text>
-            </View>
-        )
-    }
-
-    const hidePassword = (props) => {
-        <TouchableWithoutFeedback onPress={toggleSecurity}>
-            <Icon
-                {...props}
-                name={secureEntry ? 'eye-off' : 'eye'}
-            />
-        </TouchableWithoutFeedback>
-    };
-
+    
     return (
         <View>
             <Text category='h1'>
@@ -51,11 +32,13 @@ export default function LoginScreen() {
             <Input
                 placeholder="Enter Password"
                 value={password}
-                caption={renderCaption}
                 accessoryRight={hidePassword}
                 secureTextEntry={secureEntry}
                 onChangeText={newVal => setPassword(newVal)}
             />
+            <Button>
+                Log In
+            </Button>
         </View>
     );
 }

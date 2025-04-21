@@ -5,20 +5,26 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ApplicationProvider, Layout, Text } from '@ui-kitten/components';
+import { ApplicationProvider, IconRegistry, Layout, Text } from '@ui-kitten/components';
+import { NavigationContainer } from '@react-navigation/native';
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import * as eva from '@eva-design/eva';
 import LoginScreen from '@/components/LoginScreen';
 
 
 export default function HomeScreen() {
   return (
-    <ApplicationProvider {...eva} theme={eva.light}>
-      <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <SafeAreaView>
-          <LoginScreen />
-        </SafeAreaView>
-      </Layout>
-    </ApplicationProvider>
+    //<IconRegistry icons={EvaIconsPack}>
+    <NavigationContainer>
+      <ApplicationProvider {...eva} theme={eva.light}>
+        <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <SafeAreaView>
+            <LoginScreen />
+          </SafeAreaView>
+        </Layout>
+      </ApplicationProvider>
+    </NavigationContainer>
+    //</IconRegistry>
   );
 }
 
