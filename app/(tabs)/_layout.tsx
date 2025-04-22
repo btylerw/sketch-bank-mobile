@@ -9,15 +9,17 @@ import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { ApplicationProvider, IconRegistry} from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
+import { useThemeContext } from '@/contexts/ThemeContext';
 import * as eva from '@eva-design/eva';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-
+  const { themeType } = useThemeContext();
+  const theme = (themeType === 'light' ? eva.light : eva.dark);
   return (
     <>
       <IconRegistry icons={EvaIconsPack}/>
-      <ApplicationProvider {...eva} theme={eva.light}>
+      <ApplicationProvider {...eva} theme={theme}>
 
         <Tabs
           screenOptions={{
