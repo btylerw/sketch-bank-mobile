@@ -1,7 +1,6 @@
 import { Tabs } from 'expo-router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
-
 import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
@@ -15,7 +14,12 @@ import * as eva from '@eva-design/eva';
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const { themeType } = useThemeContext();
-  const theme = (themeType === 'light' ? eva.light : eva.dark);
+  const [theme, setTheme] = useState(eva.light);
+
+  useEffect(() => {
+    setTheme(themeType === 'light' ? eva.light : eva.dark);
+  }, [themeType]);
+
   return (
     <>
       <IconRegistry icons={EvaIconsPack}/>
