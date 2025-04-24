@@ -1,42 +1,69 @@
-import { Image, StyleSheet, Platform } from 'react-native';
-
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ApplicationProvider, IconRegistry, Layout, Text } from '@ui-kitten/components';
-import { EvaIconsPack } from '@ui-kitten/eva-icons';
-import * as eva from '@eva-design/eva';
-import LoginScreen from '@/app/(tabs)/pages/LoginScreen';
+import { StyleSheet, View, TouchableWithoutFeedback } from "react-native";
+import { Link, useRouter } from "expo-router";
+import { useState } from "react";
+import { Text, Input, Icon, IconElement, Button, Layout } from "@ui-kitten/components";
 
 
-export default function HomeScreen() {
-  return (
+export default function LoginScreen() {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [secureEntry, setSecureEntry] = useState(true);
+    const router = useRouter();
 
+    const toggleSecurity = () => {
+        setSecureEntry(!secureEntry);
+    }
+
+    const hidePassword = (props) => (
+        <TouchableWithoutFeedback onPress={toggleSecurity}>
+            <Icon
+                {...props}
+                name={secureEntry ? 'eye-off' : 'eye'}
+            />
+        </TouchableWithoutFeedback>
+    );
+    
+    return (
         <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <SafeAreaView>
-            <LoginScreen />
-          </SafeAreaView>
+          <View>
+              <Text category='h1'>
+                  Welcome to Sketch Bank!
+              </Text>
+              <Input
+                  placeholder="Enter Username"
+                  value={username}
+                  onChangeText={newVal => setUsername(newVal)}
+              />
+              <Input
+                  placeholder="Enter Password"
+                  value={password}
+                  accessoryRight={hidePassword}
+                  secureTextEntry={secureEntry}
+                  onChangeText={newVal => setPassword(newVal)}
+              />
+              <Button onPress={() => router.push('/HomePage')}>
+                  Log In
+              </Button>
+          </View>
         </Layout>
-  );
+    );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
+    captionContainer: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    captionIcon: {
+      width: 10,
+      height: 10,
+      marginRight: 5,
+    },
+    captionText: {
+      fontSize: 12,
+      fontWeight: '400',
+      fontFamily: 'opensans-regular',
+      color: '#8F9BB3',
+    },
+  });
