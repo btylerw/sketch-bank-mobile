@@ -1,4 +1,4 @@
-import { StyleSheet, View, TouchableWithoutFeedback } from "react-native";
+import { StyleSheet, View, TouchableWithoutFeedback, TouchableOpacity } from "react-native";
 import { Link, useRouter } from "expo-router";
 import { useState } from "react";
 import { Text, Input, Icon, IconElement, Button, Layout } from "@ui-kitten/components";
@@ -44,6 +44,11 @@ export default function LoginScreen() {
               <Button onPress={() => router.push('/HomePage')}>
                   Log In
               </Button>
+              <TouchableOpacity onPress={() => router.push('/CreateAccount')}>
+                <Text>
+                    Create Account
+                </Text>
+              </TouchableOpacity>
           </View>
         </Layout>
     );
