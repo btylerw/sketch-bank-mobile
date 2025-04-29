@@ -12,12 +12,16 @@ export default function CreateAccount() {
     const [lname, setLname] = useState('');
     const [email, setEmail] = useState('');
     const [secureEntry, setSecureEntry] = useState(true);
+    const [secureConfirmEntry, setSecureConfirmEntry] = useState(true);
     const [emailValid, setEmailValid] = useState(true);
     const [passwordsMatch, setPasswordsMatch] = useState(true);
     const router = useRouter();
 
     const toggleSecurity = () => {
         setSecureEntry(!secureEntry);
+    }
+    const toggleConfirmSecurity = () => {
+        setSecureConfirmEntry(!secureConfirmEntry);
     }
 
     const validateEmail = (value: string) => {
@@ -45,9 +49,18 @@ export default function CreateAccount() {
             />
         </TouchableWithoutFeedback>
     );
+    const hideConfirmPassword = (props) => (
+        <TouchableWithoutFeedback onPress={toggleConfirmSecurity}>
+            <Icon
+                {...props}
+                name={secureConfirmEntry ? 'eye-off' : 'eye'}
+            />
+        </TouchableWithoutFeedback>
+    );
     return (
         <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <View>
+            <View style={{gap: 10, width: '75%'}}>
+                <Text style={{textAlign: 'center'}} category="h1">Create Account</Text>
                 <Input
                     placeholder="Enter First Name"
                     value={fname}
@@ -81,8 +94,8 @@ export default function CreateAccount() {
                 <Input
                     placeholder="Confirm Password"
                     value={confirmPassword}
-                    accessoryRight={hidePassword}
-                    secureTextEntry={secureEntry}
+                    accessoryRight={hideConfirmPassword}
+                    secureTextEntry={secureConfirmEntry}
                     onChangeText={confirmPasswordsMatch}
                     status={passwordsMatch ? 'basic' : 'danger'}
                     caption={passwordsMatch ? '' : 'Passwords do not match'}

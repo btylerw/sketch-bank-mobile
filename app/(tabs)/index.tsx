@@ -25,7 +25,7 @@ export default function LoginScreen() {
     
     return (
         <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <View>
+          <View style={{gap: 10}}>
               <Text category='h1'>
                   Welcome to Sketch Bank!
               </Text>
@@ -45,7 +45,7 @@ export default function LoginScreen() {
                   Log In
               </Button>
               <TouchableOpacity onPress={() => router.push('/CreateAccount')}>
-                <Text>
+                <Text style={{color: 'blue', textAlign: 'center'}}>
                     Create Account
                 </Text>
               </TouchableOpacity>
