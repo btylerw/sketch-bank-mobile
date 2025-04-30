@@ -1,7 +1,8 @@
 import { StyleSheet, View, TouchableWithoutFeedback, TouchableOpacity } from "react-native";
 import { Link, useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Text, Input, Icon, IconElement, Button, Layout } from "@ui-kitten/components";
+import { useUserContext } from "@/contexts/UseContext";
 
 
 export default function LoginScreen() {
@@ -9,6 +10,13 @@ export default function LoginScreen() {
     const [password, setPassword] = useState('');
     const [secureEntry, setSecureEntry] = useState(true);
     const router = useRouter();
+    const { loginAttempt, loggedIn } = useUserContext();
+
+    useEffect(() => {
+        if (loggedIn) {
+            router.push('/HomePage');
+        }
+    }, [loggedIn]);
 
     const toggleSecurity = () => {
         setSecureEntry(!secureEntry);
@@ -22,6 +30,11 @@ export default function LoginScreen() {
             />
         </TouchableWithoutFeedback>
     );
+
+    const handleLogin = () => {
+        const params = { username: username, password: password };
+        loginAttempt(params);
+    }
     
     return (
         <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -41,11 +54,11 @@ export default function LoginScreen() {
                   secureTextEntry={secureEntry}
                   onChangeText={newVal => setPassword(newVal)}
               />
-              <Button onPress={() => router.push('/HomePage')}>
+              <Button onPress={handleLogin}>
                   Log In
               </Button>
               <TouchableOpacity onPress={() => router.push('/CreateAccount')}>
-                <Text style={{color: 'blue', textAlign: 'center'}}>
+                <Text style={{color: '#4488ff', textAlign: 'center'}}>
                     Create Account
                 </Text>
               </TouchableOpacity>
@@ -53,22 +66,3 @@ export default function LoginScreen() {
         </Layout>
     );
 }
-
-const styles = StyleSheet.create({
-    captionContainer: {
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    captionIcon: {
-      width: 10,
-      height: 10,
-      marginRight: 5,
-    },
-    captionText: {
-      fontSize: 12,
-      fontWeight: '400',
-      fontFamily: 'opensans-regular',
-      color: '#8F9BB3',
-    },
-  });
