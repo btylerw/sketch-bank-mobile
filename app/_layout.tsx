@@ -32,7 +32,10 @@ function AuthGate() {
       <ApplicationProvider {...eva} theme={theme}>
         <Stack screenOptions={{ headerShown: false }}>
           {!loggedIn ? (
-            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <>
+              <Stack.Screen name="index" options={{ headerShown: false }} />
+              <Stack.Screen name="CreateAccount" options={{ headerShown: false }}/>
+            </>
           ) : (
             <Stack.Screen name="(tabs)" />
           )}
