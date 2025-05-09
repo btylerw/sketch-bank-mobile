@@ -10,7 +10,7 @@ export default function LoginScreen() {
     const [password, setPassword] = useState('');
     const [secureEntry, setSecureEntry] = useState(true);
     const router = useRouter();
-    const { loginAttempt, loggedIn } = useUserContext();
+    const { loginAttempt, loggedIn, errorMsg, loginError } = useUserContext();
 
     useEffect(() => {
         if (loggedIn) {
@@ -36,6 +36,7 @@ export default function LoginScreen() {
         setUsername('');
         setPassword('');
         loginAttempt(params);
+        console.log(loggedIn);
     }
     
     return (
@@ -47,6 +48,7 @@ export default function LoginScreen() {
               <Input
                   placeholder="Enter Username"
                   value={username}
+                  status={loginError ? 'danger' : 'basic'}
                   onChangeText={newVal => setUsername(newVal)}
               />
               <Input
@@ -54,6 +56,8 @@ export default function LoginScreen() {
                   value={password}
                   accessoryRight={hidePassword}
                   secureTextEntry={secureEntry}
+                  status={loginError ? 'danger' : 'basic'}
+                  caption={loginError ? errorMsg : ''}
                   onChangeText={newVal => setPassword(newVal)}
               />
               <Button onPress={handleLogin}>

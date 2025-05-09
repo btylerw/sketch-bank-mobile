@@ -10,11 +10,11 @@ export const UserProvider = ({ children }) => {
     //const [token, setToken] = useState(localStorage.getItem('site') || '');
     // error message used for invalid login attempt
     const [errorMsg, setErrorMsg] = useState('');
+    const [loginError, setLoginError] = useState(false);
     // our login flag, will be replaced by token
     const [loggedIn, setLoggedIn] = useState(false);
-    const serverUrl = '';
+    const serverUrl = process.env.EXPO_PUBLIC_API_URL;
 
-    /* Currently commented out until backend support is enabled
     const loginAttempt = async (data) => {
         // Credentials user provided
         const userAttempt = data.username;
@@ -27,24 +27,21 @@ export const UserProvider = ({ children }) => {
             }).then(response => {
                 if (response.data) {
                     // If login is successful we provide the user with all of their data
-                    setUser(response.data);
+                    setUser(response.data[0]);
                     setLoggedIn(true);
                     setErrorMsg('');
+                    setLoginError(false);
                     return;
                 } else {
                     setErrorMsg('Invalid Login Info');
+                    setLoginError(true);
                 }
             });
         } catch(err) {
             console.error(err);
         }
     }
-    */
-   const loginAttempt = (data) => {
-        const { username, password } = data;
-        setUser(username);
-        setLoggedIn(true);
-   }
+
 
     const setBalance = (newBalance) => {
         setUser({...user, balance: newBalance});
@@ -55,7 +52,7 @@ export const UserProvider = ({ children }) => {
         setUser(null);
         setLoggedIn(false);
     }
-    return <UserContext.Provider value={{ user, setUser, loginAttempt, logOut, loggedIn, errorMsg, setErrorMsg, setBalance }}>{children}</UserContext.Provider>;
+    return <UserContext.Provider value={{ user, setUser, loginAttempt, logOut, loggedIn, errorMsg, setErrorMsg, setBalance, loginError }}>{children}</UserContext.Provider>;
 }
 
 export const useUserContext = () => {
