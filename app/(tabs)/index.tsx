@@ -33,6 +33,8 @@ export default function LoginScreen() {
 
     const handleLogin = () => {
         const params = { username: username, password: password };
+        setUsername('');
+        setPassword('');
         loginAttempt(params);
     }
     

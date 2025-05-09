@@ -24,7 +24,7 @@ export default function TabLayout() {
     <>
       <IconRegistry icons={EvaIconsPack}/>
       <ApplicationProvider {...eva} theme={theme}>
-          <Tabs
+      <Tabs
             screenOptions={{
               tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
               headerShown: false,
@@ -41,15 +41,26 @@ export default function TabLayout() {
             <Tabs.Screen
               name="index"
               options={{
-                title: 'Home',
-                tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+                href: null,
               }}
               />
             <Tabs.Screen
               name="explore"
               options={{
-                title: 'Explore',
-                tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+                href: null,
+              }}
+            />
+            <Tabs.Screen
+              name="CreateAccount"
+              options={{
+                href: null,
+              }}
+            />
+            <Tabs.Screen
+              name="HomePage"
+              options={{
+                title: 'Home',
+                tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
               }}
               />
           </Tabs>

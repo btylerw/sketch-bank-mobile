@@ -3,6 +3,7 @@ import { Text, Button, Layout, Input, Icon } from "@ui-kitten/components"
 import { View, TouchableWithoutFeedback } from "react-native"
 import { useRouter } from "expo-router";
 import { useThemeContext } from "@/contexts/ThemeContext"
+import axios from "axios";
 
 export default function CreateAccount() {
     const [username, setUsername] = useState('');
@@ -16,6 +17,7 @@ export default function CreateAccount() {
     const [emailValid, setEmailValid] = useState(true);
     const [passwordsMatch, setPasswordsMatch] = useState(true);
     const router = useRouter();
+    const serverUrl = process.env.EXPO_PUBLIC_API_URL;
 
     const toggleSecurity = () => {
         setSecureEntry(!secureEntry);
@@ -35,9 +37,24 @@ export default function CreateAccount() {
         setPasswordsMatch(value === password);
     }
 
-    const handleCreateAccount = () => {
+    const handleCreateAccount = async () => {
         if (emailValid && passwordsMatch) {
-            router.push('/HomePage');
+            console.log(serverUrl);
+            try {
+                await axios.post(`${serverUrl}/users/signup`, {
+                    username: username,
+                    fname: fname,
+                    lname: lname,
+                    password: password,
+                    email: email
+                }).then(response => {
+                    const params = {username: username, password: password};
+                    console.log(response);
+                    router.push('/HomePage');
+                })
+            } catch(err) {
+                console.error(err);
+            }
         }
     }
 
