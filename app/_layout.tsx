@@ -3,21 +3,53 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { UserProvider } from '@/contexts/UseContext';
-
 import { useColorScheme } from '@/hooks/useColorScheme';
-
+import { useUserContext } from '@/contexts/UseContext';
+import { useThemeContext } from '@/contexts/ThemeContext';
+import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
+import * as eva from '@eva-design/eva';
+import LoginScreen from '@/app/index';
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+function AuthGate() {
+  const { loggedIn }: any = useUserContext();
+  const [theme, setTheme] = useState(eva.light);
+  const {themeType}: any = useThemeContext();
+
+  useEffect(() => {
+    setTheme(themeType === 'light' ? eva.light : eva.dark);
+  }, [themeType]);
+  
+  return (
+    <>
+      <IconRegistry icons={EvaIconsPack} />
+      <ApplicationProvider {...eva} theme={theme}>
+        <Stack screenOptions={{ headerShown: false }}>
+          {!loggedIn ? (
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+          ) : (
+            <Stack.Screen name="(tabs)" />
+          )}
+          <Stack.Screen name="+not-found" />
+        </Stack>
+        <StatusBar style="auto" />
+      </ApplicationProvider>
+    </>
+  );
+}
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
+
 
   useEffect(() => {
     if (loaded) {
@@ -32,11 +64,7 @@ export default function RootLayout() {
   return (
     <UserProvider>
       <ThemeProvider>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-        <StatusBar style="auto" />
+        <AuthGate/>
       </ThemeProvider>
     </UserProvider>
   );

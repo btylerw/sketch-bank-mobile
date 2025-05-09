@@ -3,7 +3,7 @@ import axios from "axios";
 
 const UserContext = createContext();
 
-export const UserProvider = ({ children }) => {
+export const UserProvider = ({ children }: any) => {
     // stores user data grabbed from database
     const [user, setUser] = useState(null);
     // token will be implemented later
@@ -15,7 +15,7 @@ export const UserProvider = ({ children }) => {
     const [loggedIn, setLoggedIn] = useState(false);
     const serverUrl = process.env.EXPO_PUBLIC_API_URL;
 
-    const loginAttempt = async (data) => {
+    const loginAttempt = async (data: any) => {
         // Credentials user provided
         const userAttempt = data.username;
         const passAttempt = data.password;
@@ -43,7 +43,7 @@ export const UserProvider = ({ children }) => {
     }
 
 
-    const setBalance = (newBalance) => {
+    const setBalance = (newBalance: any) => {
         setUser({...user, balance: newBalance});
     }
 

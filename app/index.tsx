@@ -10,11 +10,11 @@ export default function LoginScreen() {
     const [password, setPassword] = useState('');
     const [secureEntry, setSecureEntry] = useState(true);
     const router = useRouter();
-    const { loginAttempt, loggedIn, errorMsg, loginError } = useUserContext();
+    const { loginAttempt, loggedIn, errorMsg, loginError }:any = useUserContext();
 
     useEffect(() => {
         if (loggedIn) {
-            router.push('/HomePage');
+            router.replace('/(tabs)/HomePage');
         }
     }, [loggedIn]);
 
@@ -22,7 +22,7 @@ export default function LoginScreen() {
         setSecureEntry(!secureEntry);
     }
 
-    const hidePassword = (props) => (
+    const hidePassword = (props: any) => (
         <TouchableWithoutFeedback onPress={toggleSecurity}>
             <Icon
                 {...props}
@@ -36,7 +36,6 @@ export default function LoginScreen() {
         setUsername('');
         setPassword('');
         loginAttempt(params);
-        console.log(loggedIn);
     }
     
     return (

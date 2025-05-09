@@ -6,18 +6,18 @@ import { useThemeContext } from "@/contexts/ThemeContext"
 import axios from "axios";
 
 export default function CreateAccount() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [fname, setFname] = useState('');
-    const [lname, setLname] = useState('');
-    const [email, setEmail] = useState('');
-    const [secureEntry, setSecureEntry] = useState(true);
-    const [secureConfirmEntry, setSecureConfirmEntry] = useState(true);
-    const [emailValid, setEmailValid] = useState(true);
-    const [passwordsMatch, setPasswordsMatch] = useState(true);
+    const [username, setUsername] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [confirmPassword, setConfirmPassword] = useState<string>('');
+    const [fname, setFname] = useState<string>('');
+    const [lname, setLname] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
+    const [secureEntry, setSecureEntry] = useState<boolean>(true);
+    const [secureConfirmEntry, setSecureConfirmEntry] = useState<boolean>(true);
+    const [emailValid, setEmailValid] = useState<boolean>(true);
+    const [passwordsMatch, setPasswordsMatch] = useState<boolean>(true);
     const router = useRouter();
-    const serverUrl = process.env.EXPO_PUBLIC_API_URL;
+    const serverUrl: string | undefined = process.env.EXPO_PUBLIC_API_URL;
 
     const toggleSecurity = () => {
         setSecureEntry(!secureEntry);
@@ -28,7 +28,7 @@ export default function CreateAccount() {
 
     const validateEmail = (value: string) => {
         setEmail(value);
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         setEmailValid(emailRegex.test(value));
     };
 
@@ -58,7 +58,7 @@ export default function CreateAccount() {
         }
     }
 
-    const hidePassword = (props) => (
+    const hidePassword = (props: any) => (
         <TouchableWithoutFeedback onPress={toggleSecurity}>
             <Icon
                 {...props}
@@ -66,7 +66,7 @@ export default function CreateAccount() {
             />
         </TouchableWithoutFeedback>
     );
-    const hideConfirmPassword = (props) => (
+    const hideConfirmPassword = (props: any) => (
         <TouchableWithoutFeedback onPress={toggleConfirmSecurity}>
             <Icon
                 {...props}

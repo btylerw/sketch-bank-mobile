@@ -6,10 +6,9 @@ import { useEffect } from "react";
 import { useRouter } from "expo-router";
 
 export default function HomePage() {
-    const { toggleTheme } = useThemeContext();
-    const { loggedIn, logOut, user } = useUserContext();
+    const { toggleTheme }: any = useThemeContext();
+    const { loggedIn, logOut, user }: any = useUserContext();
     const router = useRouter();
-    console.log(user);
     useEffect(() => {
         if (!loggedIn) {
             router.replace('/');

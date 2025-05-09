@@ -6,14 +6,12 @@ import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
-import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import { useThemeContext } from '@/contexts/ThemeContext';
 import * as eva from '@eva-design/eva';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const { themeType } = useThemeContext();
+  const { themeType }: any = useThemeContext();
   const [theme, setTheme] = useState(eva.light);
 
   useEffect(() => {
@@ -22,8 +20,6 @@ export default function TabLayout() {
 
   return (
     <>
-      <IconRegistry icons={EvaIconsPack}/>
-      <ApplicationProvider {...eva} theme={theme}>
       <Tabs
             screenOptions={{
               tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
@@ -38,12 +34,13 @@ export default function TabLayout() {
                 default: {},
               }),
             }}>
-            <Tabs.Screen
-              name="index"
-              options={{
-                href: null,
-              }}
-              />
+              <Tabs.Screen
+                name="HomePage"
+                options={{
+                  title: 'Home',
+                  tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+                }}
+                />
             <Tabs.Screen
               name="explore"
               options={{
@@ -56,15 +53,7 @@ export default function TabLayout() {
                 href: null,
               }}
             />
-            <Tabs.Screen
-              name="HomePage"
-              options={{
-                title: 'Home',
-                tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-              }}
-              />
           </Tabs>
-      </ApplicationProvider>
     </>
   );
 }
