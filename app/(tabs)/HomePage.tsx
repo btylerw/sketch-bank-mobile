@@ -1,12 +1,10 @@
 import { Text, Button, Layout } from "@ui-kitten/components"
 import { View } from "react-native"
-import { useThemeContext } from "@/contexts/ThemeContext"
 import { useUserContext } from "@/contexts/UseContext";
 import { useEffect } from "react";
 import { useRouter } from "expo-router";
 
 export default function HomePage() {
-    const { toggleTheme }: any = useThemeContext();
     const { loggedIn, logOut, user }: any = useUserContext();
     const router = useRouter();
     useEffect(() => {
@@ -21,9 +19,6 @@ export default function HomePage() {
         <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
             <View style={{gap: 10}}>
                 {user && <Text category="h1">Welcome {user.username}!</Text>}
-                <Button onPress={toggleTheme}>
-                    Change Theme
-                </Button>
                 <Button onPress={handleLogout}>
                     Log Out
                 </Button>
