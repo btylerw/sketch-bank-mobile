@@ -16,6 +16,8 @@ export default function CreateAccount() {
     const [secureConfirmEntry, setSecureConfirmEntry] = useState<boolean>(true);
     const [emailValid, setEmailValid] = useState<boolean>(true);
     const [passwordsMatch, setPasswordsMatch] = useState<boolean>(true);
+    const [error, setError] = useState<boolean>(false);
+    const [errorMsg, setErrorMsg] = useState<string>('');
     const router = useRouter();
     const serverUrl: string | undefined = process.env.EXPO_PUBLIC_API_URL;
 
@@ -39,7 +41,6 @@ export default function CreateAccount() {
 
     const handleCreateAccount = async () => {
         if (emailValid && passwordsMatch) {
-            console.log(serverUrl);
             try {
                 await axios.post(`${serverUrl}/users/signup`, {
                     username: username,
@@ -49,11 +50,13 @@ export default function CreateAccount() {
                     email: email
                 }).then(response => {
                     const params = {username: username, password: password};
-                    console.log(response);
                     router.push('/HomePage');
                 })
-            } catch(err) {
-                console.error(err);
+            } catch(err: any) {
+                console.error(err.response.data.error);
+                setError(true);
+                setErrorMsg(err.response.data.error);
+                console.log(error);
             }
         }
     }
@@ -120,6 +123,7 @@ export default function CreateAccount() {
                 <Button onPress={handleCreateAccount}>
                     Create Account
                 </Button>
+                {error && <Text style={{color: 'red', textAlign: 'center'}}>{errorMsg}</Text>}
             </View>
         </Layout>
     )
