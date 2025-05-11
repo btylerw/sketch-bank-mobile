@@ -8,7 +8,7 @@ export default function Settings() {
         return (
             <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                 <View style={{gap: 10}}>
-                    <Text category="h1">Welcome to the Settings Page!</Text>
+                    <Text category="h4">Welcome to the Settings Page!</Text>
                     <Button onPress={toggleTheme}>
                         Change Theme
                     </Button>
