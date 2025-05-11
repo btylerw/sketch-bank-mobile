@@ -26,11 +26,13 @@ export default function Transactions() {
                 <Text style={[styles.cell, styles.headerText]}>PRICE</Text>
                 <Text style={[styles.cell, styles.headerText]}>DATE</Text>
             </View>
-            <FlatList
-                data={transactions}
-                renderItem={renderItem}
-                keyExtractor={(item) => item.id}
-            />
+            <View style={{ maxHeight: 500 }}>
+                <FlatList
+                    data={transactions}
+                    renderItem={renderItem}
+                    keyExtractor={(item) => item.id}
+                />
+            </View>
             </View>
         </Layout>
     )
