@@ -13,10 +13,10 @@ import { useThemeContext } from '@/contexts/ThemeContext';
 import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import * as eva from '@eva-design/eva';
-import LoginScreen from '@/app/index';
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
+// AuthGate is used to render a login page and account creation page before rendering the rest of the app
 function AuthGate() {
   const { loggedIn }: any = useUserContext();
   const [theme, setTheme] = useState(eva.light);
