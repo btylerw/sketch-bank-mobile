@@ -82,7 +82,7 @@ export default function Transactions() {
         const [form, setForm] = useState({ name: '', price: '', date: '' });
 
         const handleAdd = () => {
-            onAdd(form);
+            onAdd({...form, price: `-${form.price}`});
             setForm({ name: '', price: '', date: '' });
         }
 
