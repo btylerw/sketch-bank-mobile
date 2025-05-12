@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Text, Button, Layout, Input } from "@ui-kitten/components"
-import { View, FlatList, StyleSheet, Modal, Platform, Pressable } from "react-native";
+import { View, FlatList, StyleSheet, Modal, Platform, Pressable, Alert } from "react-native";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import axios from "axios";
 import { useUserContext } from "@/contexts/UseContext";
@@ -46,9 +46,30 @@ export default function Transactions() {
         </View>
     );
     
-    const handleAddTransaction = (newTx: any) => {
+    const handleAddTransaction = async (newTx: any) => {
         /* TODO: Add POST request here to insert new transactions to database */
-        setModalVisible(false);
+        console.log('test1');
+        try {
+            const amount = Number(newTx.price);
+            await axios.post(`${serverUrl}/users/addTransaction`, {
+                acc_id: user.acc_id,
+                transName: newTx.name,
+                transPrice: amount,
+                transDate: newTx.date,
+                balance: user.balance,
+            }).then(response => {
+                console.log(response);
+                if (response) {
+                    Alert.alert('Transaction successfully added!');
+                } else {
+                    Alert.alert('Issue adding transaction');
+                }
+                setModalVisible(false);
+            })
+        } catch(err) {
+            console.error(err);
+            setModalVisible(false);
+        }
     };
     
     // Modal that allows user to add in a new transaction
@@ -56,6 +77,7 @@ export default function Transactions() {
         const [form, setForm] = useState({ name: '', price: '', date: '' });
 
         const handleAdd = () => {
+            console.log('test');
             onAdd(form);
             setForm({ name: '', price: '', date: '' });
         }
