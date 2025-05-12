@@ -11,8 +11,7 @@ import { styles } from "@/components/styles";
 export default function Transactions() {
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [transactions, setTransactions] = useState([]);
-    const [updated, setUpdated] = useState<boolean>(false);
-    const { user }: any = useUserContext();
+    const { user, updated, toggleUpdate }: any = useUserContext();
     const { themeType }: any = useThemeContext();
     const serverUrl = process.env.EXPO_PUBLIC_API_URL;
 
@@ -68,7 +67,7 @@ export default function Transactions() {
                 Alert.alert('Transaction successfully added!');
                 setModalVisible(false);
                 // Re-rendering transactions list when a new one is added
-                setUpdated(!updated);
+                toggleUpdate();
             })
         } catch(err) {
             console.error(err);

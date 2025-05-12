@@ -13,6 +13,7 @@ export const UserProvider = ({ children }: any) => {
     const [loginError, setLoginError] = useState(false);
     // our login flag, will be replaced by token
     const [loggedIn, setLoggedIn] = useState(false);
+    const [updated, setUpdated] = useState(false);
     const serverUrl = process.env.EXPO_PUBLIC_API_URL;
 
     const loginAttempt = async (data: any) => {
@@ -42,6 +43,9 @@ export const UserProvider = ({ children }: any) => {
         }
     }
 
+    const toggleUpdate = () => {
+        setUpdated(!updated);
+    }
 
     const setBalance = (newBalance: any) => {
         setUser({...user, balance: newBalance});
@@ -52,7 +56,7 @@ export const UserProvider = ({ children }: any) => {
         setUser(null);
         setLoggedIn(false);
     }
-    return <UserContext.Provider value={{ user, setUser, loginAttempt, logOut, loggedIn, errorMsg, setErrorMsg, setBalance, loginError }}>{children}</UserContext.Provider>;
+    return <UserContext.Provider value={{ user, setUser, loginAttempt, logOut, loggedIn, errorMsg, setErrorMsg, setBalance, loginError, toggleUpdate, updated }}>{children}</UserContext.Provider>;
 }
 
 export const useUserContext = () => {

@@ -9,7 +9,8 @@ import axios from "axios";
 
 export default function HomePage() {
     const [modalVisible, setModalVisible] = useState(false);
-    const { loggedIn, user }: any = useUserContext();
+    const [balance, setBalance] = useState(0);
+    const { loggedIn, user, updated, toggleUpdate }: any = useUserContext();
     const router = useRouter();
     const { themeType }: any = useThemeContext();
     const serverUrl = process.env.EXPO_PUBLIC_API_URL;
@@ -18,7 +19,26 @@ export default function HomePage() {
         if (!loggedIn) {
             router.replace('/');
         }
-    });
+    }, [loggedIn]);
+
+    
+    const getBalance = async () => {
+        try {
+            await axios.get(`${serverUrl}/users/getBalance`, {
+                params: {acc_id: user.acc_id}
+            }).then(response => {
+                if (response.data) {
+                    setBalance(response.data[0].balance);
+                }
+            })
+        } catch(err) {
+            console.error(err);
+        }
+    }
+    
+    useEffect(() => {
+        getBalance();
+    }, [updated]);
 
     const handleFundTransfer = async (transferData: any) => {
         try {
@@ -31,6 +51,7 @@ export default function HomePage() {
                 balance: Number(user.balance),
             }).then(() => {
                 Alert.alert('Transaction successfully added!');
+                toggleUpdate();
                 setModalVisible(false);
             })
         } catch(err) {
@@ -91,7 +112,7 @@ export default function HomePage() {
                     onTransfer={handleFundTransfer}
                 />
                 {user && <Text category="h4">Welcome {user.fname}!</Text>}
-                {user && <Text category="h4">Account Balance: ${user.balance}</Text>}
+                {user && <Text category="h4">Account Balance: ${balance}</Text>}
                 <Button onPress={() => setModalVisible(true)}>Transfer Funds</Button>
             </View>
         </Layout>
