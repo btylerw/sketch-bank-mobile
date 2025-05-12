@@ -43,7 +43,9 @@ export default function HomePage() {
     const handleFundTransfer = async (transferData: any) => {
         try {
             const amount = Number(transferData.amount);
-            console.log(transferData.acc_id);
+            if (Number(transferData.acc_id) === user.acc_id) {
+                throw('Cannot transfer funds to own account')
+            } 
             await axios.post(`${serverUrl}/transactions/transferFunds`, {
                 sender_id: user.acc_id,
                 receiver_id: transferData.acc_id,
@@ -56,7 +58,8 @@ export default function HomePage() {
             })
         } catch(err) {
             console.error(err);
-            Alert.alert('Issue adding transaction');
+            const errorMessage = (err === 'Cannot transfer funds to own account' ? err : 'Issue adding transaction');
+            Alert.alert(errorMessage);
             setModalVisible(false);
         }
     }
