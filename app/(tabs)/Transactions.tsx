@@ -5,6 +5,7 @@ import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import axios from "axios";
 import { useThemeContext } from "@/contexts/ThemeContext";
 import { useUserContext } from "@/contexts/UseContext";
+import { styles } from "@/components/styles";
 
 
 export default function Transactions() {
@@ -18,7 +19,7 @@ export default function Transactions() {
     // API call that retrieves all of the user's transaction data
     const fetchTransactions = async () => {
         try {
-            await axios.get(`${serverUrl}/users/getTransactions`, {
+            await axios.get(`${serverUrl}/transactions/getTransactions`, {
                 params: { acc_id: user.acc_id }
             })
             .then(response => {
@@ -57,7 +58,7 @@ export default function Transactions() {
         /* TODO: Add POST request here to insert new transactions to database */
         try {
             const amount = Number(newTx.price);
-            await axios.post(`${serverUrl}/users/addTransaction`, {
+            await axios.post(`${serverUrl}/transactions/addTransaction`, {
                 acc_id: user.acc_id,
                 transName: newTx.name,
                 transPrice: amount,
@@ -160,57 +161,3 @@ export default function Transactions() {
         </Layout>
     )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    width: '90%',
-  },
-  row: {
-    flexDirection: 'row',
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-  cell: {
-    flex: 1,
-  },
-  header: {
-    borderBottomWidth: 2,
-    borderBottomColor: '#000',
-  },
-  headerText: {
-    fontWeight: 'bold',
-  },
-    modalOverlay: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-  },
-  modalContent: {
-    width: '80%',
-    backgroundColor: 'white',
-    borderRadius: 10,
-    padding: 20,
-    gap: 10
-  },
-  modalContentDark: {
-    width: '80%',
-    backgroundColor: '#222B45',
-    borderRadius: 10,
-    padding: 20,
-    gap: 10
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 8,
-    marginBottom: 10,
-    borderRadius: 5,
-  },
-});
