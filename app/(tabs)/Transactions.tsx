@@ -3,13 +3,16 @@ import { Text, Button, Layout, Input } from "@ui-kitten/components"
 import { View, FlatList, StyleSheet, Modal, Platform, Pressable, Alert } from "react-native";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import axios from "axios";
+import { useThemeContext } from "@/contexts/ThemeContext";
 import { useUserContext } from "@/contexts/UseContext";
 
 
 export default function Transactions() {
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [transactions, setTransactions] = useState([]);
+    const [updated, setUpdated] = useState<boolean>(false);
     const { user }: any = useUserContext();
+    const { themeType }: any = useThemeContext();
     const serverUrl = process.env.EXPO_PUBLIC_API_URL;
 
     // API call that retrieves all of the user's transaction data
@@ -21,11 +24,14 @@ export default function Transactions() {
             .then(response => {
                 const data = response.data;
                 // Change date in every entry to YYYY-MM-DD format
-                const formattedTransactions = data.map(tx => ({
+                const formattedTransactions = data.map((tx: any) => ({
                     ...tx,
                     date: new Date(tx.date).toISOString().split('T')[0],
                 }));
-                setTransactions(formattedTransactions);
+                // Data is sent from oldest to newest
+                // So we're reversing this array to show the most recent transactions first
+                const arr = formattedTransactions.reverse();
+                setTransactions(arr);
             })
         } catch(err) {
             console.error(err);
@@ -35,7 +41,8 @@ export default function Transactions() {
     // Make API call on first page render
     useEffect(() => {
         fetchTransactions();
-    }, []);
+        // updated is in the dependency array to re-fresh the Transactions list when it is updated
+    }, [updated]);
 
     // Creates a View for each individual transaction
     const renderItem = ({ item }: any) => (
@@ -48,7 +55,6 @@ export default function Transactions() {
     
     const handleAddTransaction = async (newTx: any) => {
         /* TODO: Add POST request here to insert new transactions to database */
-        console.log('test1');
         try {
             const amount = Number(newTx.price);
             await axios.post(`${serverUrl}/users/addTransaction`, {
@@ -57,17 +63,15 @@ export default function Transactions() {
                 transPrice: amount,
                 transDate: newTx.date,
                 balance: user.balance,
-            }).then(response => {
-                console.log(response);
-                if (response) {
-                    Alert.alert('Transaction successfully added!');
-                } else {
-                    Alert.alert('Issue adding transaction');
-                }
+            }).then(() => {
+                Alert.alert('Transaction successfully added!');
                 setModalVisible(false);
+                // Re-rendering transactions list when a new one is added
+                setUpdated(!updated);
             })
         } catch(err) {
             console.error(err);
+            Alert.alert('Issue adding transaction');
             setModalVisible(false);
         }
     };
@@ -77,7 +81,6 @@ export default function Transactions() {
         const [form, setForm] = useState({ name: '', price: '', date: '' });
 
         const handleAdd = () => {
-            console.log('test');
             onAdd(form);
             setForm({ name: '', price: '', date: '' });
         }
@@ -105,7 +108,7 @@ export default function Transactions() {
                 transparent={true}
             >
                 <View style={styles.modalOverlay}>
-                    <View style={styles.modalContent}>
+                    <View style={themeType === 'light' ? styles.modalContent : styles.modalContentDark}>
                     <Text style={styles.modalTitle}>Add Transaction</Text>
 
                     <Input
@@ -189,6 +192,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,
+    gap: 10
+  },
+  modalContentDark: {
+    width: '80%',
+    backgroundColor: '#222B45',
+    borderRadius: 10,
+    padding: 20,
+    gap: 10
   },
   modalTitle: {
     fontSize: 18,
