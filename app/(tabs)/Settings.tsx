@@ -5,7 +5,7 @@ import { useUserContext } from "@/contexts/UseContext";
 
 export default function Settings() {
     const {toggleTheme}: any = useThemeContext();
-    const { logOut } = useUserContext();
+    const { logOut }: any = useUserContext();
 
     const handleLogout = () => {
         logOut();

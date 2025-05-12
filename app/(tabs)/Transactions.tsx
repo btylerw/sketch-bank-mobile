@@ -1,29 +1,57 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Text, Button, Layout, Input } from "@ui-kitten/components"
 import { View, FlatList, StyleSheet, Modal, Platform, Pressable } from "react-native";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
+import axios from "axios";
+import { useUserContext } from "@/contexts/UseContext";
 
 
 export default function Transactions() {
     const [modalVisible, setModalVisible] = useState<boolean>(false);
-    const [newTransaction, setNewTransaction] = useState<{name: string, price: string, date: string}>({ name: '', price: '', date: '' });
-    const [transactions, setTransactions] = useState([
-        {id: '1', name: 'Groceries', price: '$25.00', date: '2025-05-10'}
-    ])
-    
+    const [transactions, setTransactions] = useState([]);
+    const { user }: any = useUserContext();
+    const serverUrl = process.env.EXPO_PUBLIC_API_URL;
+
+    // API call that retrieves all of the user's transaction data
+    const fetchTransactions = async () => {
+        try {
+            await axios.get(`${serverUrl}/users/getTransactions`, {
+                params: { acc_id: user.acc_id }
+            })
+            .then(response => {
+                const data = response.data;
+                // Change date in every entry to YYYY-MM-DD format
+                const formattedTransactions = data.map(tx => ({
+                    ...tx,
+                    date: new Date(tx.date).toISOString().split('T')[0],
+                }));
+                setTransactions(formattedTransactions);
+            })
+        } catch(err) {
+            console.error(err);
+        }
+    }
+
+    // Make API call on first page render
+    useEffect(() => {
+        fetchTransactions();
+    }, []);
+
+    // Creates a View for each individual transaction
     const renderItem = ({ item }: any) => (
         <View style={styles.row}>
             <Text style={styles.cell}>{item.name}</Text>
             <Text style={styles.cell}>{item.price}</Text>
             <Text style={styles.cell}>{item.date}</Text>
         </View>
-    )
+    );
     
     const handleAddTransaction = (newTx: any) => {
-        setTransactions([...transactions, { ...newTx, id: Date.now().toString() }]);
+        /* TODO: Add POST request here to insert new transactions to database */
         setModalVisible(false);
     };
     
+    // Modal that allows user to add in a new transaction
     const TransactionModal = ({ visible, onClose, onAdd }: any) => {
         const [form, setForm] = useState({ name: '', price: '', date: '' });
 
@@ -32,6 +60,8 @@ export default function Transactions() {
             setForm({ name: '', price: '', date: '' });
         }
 
+        // Populates a calendar to select a date
+        // ONLY WORKS FOR ANDROID
         const showDatePicker = () => {
             DateTimePickerAndroid.open({
             value: new Date(),
@@ -77,7 +107,7 @@ export default function Transactions() {
                 </View>
             </Modal>
         )
-    }
+    };
 
     return (
         <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center', gap: 10}}>

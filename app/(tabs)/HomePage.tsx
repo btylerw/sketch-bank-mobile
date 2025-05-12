@@ -15,8 +15,8 @@ export default function HomePage() {
     return (
         <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
             <View style={{gap: 10}}>
-                {user && <Text category="h1">Welcome {user.username}!</Text>}
-                {user && <Text category="h2">Account Balance: {user.balance}</Text>}
+                {user && <Text category="h4">Welcome {user.fname}!</Text>}
+                {user && <Text category="h4">Account Balance: ${user.balance}</Text>}
             </View>
         </Layout>
     )
