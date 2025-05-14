@@ -10,6 +10,11 @@ import axios from "axios";
 export default function HomePage() {
     const [modalVisible, setModalVisible] = useState(false);
     const [balance, setBalance] = useState(0);
+    const [day, setDay] = useState("1");
+    const [month, setMonth] = useState("1");
+    const [hour, setHour] = useState("0");
+    const [minute, setMinute] = useState("0");
+    const [amPm, setAmPm] = useState("AM");
     const { loggedIn, user, updated, toggleUpdate }: any = useUserContext();
     const router = useRouter();
     const { themeType }: any = useThemeContext();
@@ -62,6 +67,11 @@ export default function HomePage() {
             Alert.alert(errorMessage);
             setModalVisible(false);
         }
+    }
+
+    const printCron = () => {
+        const cronSchedule = `0 0 ${day} ${month} *`;
+        console.log(cronSchedule);
     }
 
     // Modal that allows user to add in a new transaction
@@ -117,6 +127,19 @@ export default function HomePage() {
                 {user && <Text category="h4">Welcome {user.fname}!</Text>}
                 {user && <Text category="h4">Account Balance: ${balance}</Text>}
                 <Button onPress={() => setModalVisible(true)}>Transfer Funds</Button>
+                <Input 
+                    placeholder="Day"
+                    style={styles.input}
+                    value={day}
+                    onChangeText={(text) => setDay(text)}
+                />
+                <Input 
+                    placeholder="Month"
+                    style={styles.input}
+                    value={month}
+                    onChangeText={(text) => setMonth(text)}
+                />
+                <Button onPress={printCron}>Submit</Button>
             </View>
         </Layout>
     )
