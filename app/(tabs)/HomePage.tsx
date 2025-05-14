@@ -10,16 +10,12 @@ import axios from "axios";
 export default function HomePage() {
     const [modalVisible, setModalVisible] = useState(false);
     const [balance, setBalance] = useState(0);
-    const [day, setDay] = useState("1");
-    const [month, setMonth] = useState("1");
-    const [hour, setHour] = useState("0");
-    const [minute, setMinute] = useState("0");
-    const [amPm, setAmPm] = useState("AM");
     const { loggedIn, user, updated, toggleUpdate }: any = useUserContext();
     const router = useRouter();
     const { themeType }: any = useThemeContext();
     const serverUrl = process.env.EXPO_PUBLIC_API_URL;
 
+    // When user logs out, return to login page
     useEffect(() => {
         if (!loggedIn) {
             router.replace('/');
@@ -27,6 +23,7 @@ export default function HomePage() {
     }, [loggedIn]);
 
     
+    // Gets the user's current account balance
     const getBalance = async () => {
         try {
             await axios.get(`${serverUrl}/users/getBalance`, {
@@ -45,9 +42,11 @@ export default function HomePage() {
         getBalance();
     }, [updated]);
 
+    // API call that updates database to handle a fund transfer
     const handleFundTransfer = async (transferData: any) => {
         try {
             const amount = Number(transferData.amount);
+            // An account cannot send funds to itself
             if (Number(transferData.acc_id) === user.acc_id) {
                 throw('Cannot transfer funds to own account')
             } 
@@ -67,11 +66,6 @@ export default function HomePage() {
             Alert.alert(errorMessage);
             setModalVisible(false);
         }
-    }
-
-    const printCron = () => {
-        const cronSchedule = `0 0 ${day} ${month} *`;
-        console.log(cronSchedule);
     }
 
     // Modal that allows user to add in a new transaction
@@ -127,19 +121,6 @@ export default function HomePage() {
                 {user && <Text category="h4">Welcome {user.fname}!</Text>}
                 {user && <Text category="h4">Account Balance: ${balance}</Text>}
                 <Button onPress={() => setModalVisible(true)}>Transfer Funds</Button>
-                <Input 
-                    placeholder="Day"
-                    style={styles.input}
-                    value={day}
-                    onChangeText={(text) => setDay(text)}
-                />
-                <Input 
-                    placeholder="Month"
-                    style={styles.input}
-                    value={month}
-                    onChangeText={(text) => setMonth(text)}
-                />
-                <Button onPress={printCron}>Submit</Button>
             </View>
         </Layout>
     )

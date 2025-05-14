@@ -47,16 +47,12 @@ export const UserProvider = ({ children }: any) => {
         setUpdated(!updated);
     }
 
-    const setBalance = (newBalance: any) => {
-        setUser({...user, balance: newBalance});
-    }
-
     // Reset everything and log out
     const logOut = () => {
         setUser(null);
         setLoggedIn(false);
     }
-    return <UserContext.Provider value={{ user, setUser, loginAttempt, logOut, loggedIn, errorMsg, setErrorMsg, setBalance, loginError, toggleUpdate, updated }}>{children}</UserContext.Provider>;
+    return <UserContext.Provider value={{ user, setUser, loginAttempt, logOut, loggedIn, errorMsg, setErrorMsg, loginError, toggleUpdate, updated }}>{children}</UserContext.Provider>;
 }
 
 export const useUserContext = () => {
