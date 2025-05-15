@@ -27,7 +27,7 @@ export default function ScheduleTransactions() {
     // API call that creates a new job for user on the database and creates a new entry in it's reference table
     const submitJob = async () => {
         const day = selectedDate.getDate();
-        const cron = `0 * * * *`;
+        const cron = `0 * ${day} * *`;
         try {
             await axios.post(`${serverUrl}/schedule/schedule-job`, {
                     acc_id: user.acc_id,
